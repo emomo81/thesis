@@ -1,0 +1,428 @@
+"""Shared utilities for the Student Dropout & Academic Success dashboard."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import pandas as pd
+import streamlit as st
+
+# --------------------------------------------------------------------------- #
+# Paths
+# --------------------------------------------------------------------------- #
+REPO_ROOT = Path(__file__).resolve().parents[1]
+RAW_DATA_PATH = REPO_ROOT / "data" / "raw" / "data.csv"
+CLEAN_DATA_PATH = REPO_ROOT / "data" / "students.csv"
+
+# --------------------------------------------------------------------------- #
+# Target
+# --------------------------------------------------------------------------- #
+TARGET_COL = "Target"
+TARGET_ORDER = ["Dropout", "Enrolled", "Graduate"]
+TARGET_COLORS = {
+    "Dropout": "#E63946",
+    "Enrolled": "#F4A261",
+    "Graduate": "#2A9D8F",
+    "No dropout": "#2A9D8F",
+}
+
+# --------------------------------------------------------------------------- #
+# Feature groups (UCI id-697 layout)
+# --------------------------------------------------------------------------- #
+FEATURE_GROUPS: dict[str, list[str]] = {
+    "Demographics & admission": [
+        "Marital status",
+        "Application mode",
+        "Application order",
+        "Course",
+        "Daytime/evening attendance",
+        "Previous qualification",
+        "Previous qualification (grade)",
+        "Nationality",
+        "Displaced",
+        "Gender",
+        "Age at enrollment",
+        "International",
+        "Admission grade",
+    ],
+    "Socioeconomic": [
+        "Mother's qualification",
+        "Father's qualification",
+        "Mother's occupation",
+        "Father's occupation",
+        "Educational special needs",
+        "Debtor",
+        "Tuition fees up to date",
+        "Scholarship holder",
+    ],
+    "Macroeconomic": ["Unemployment rate", "Inflation rate", "GDP"],
+    "1st semester performance": [
+        "Curricular units 1st sem (credited)",
+        "Curricular units 1st sem (enrolled)",
+        "Curricular units 1st sem (evaluations)",
+        "Curricular units 1st sem (approved)",
+        "Curricular units 1st sem (grade)",
+        "Curricular units 1st sem (without evaluations)",
+    ],
+    "2nd semester performance": [
+        "Curricular units 2nd sem (credited)",
+        "Curricular units 2nd sem (enrolled)",
+        "Curricular units 2nd sem (evaluations)",
+        "Curricular units 2nd sem (approved)",
+        "Curricular units 2nd sem (grade)",
+        "Curricular units 2nd sem (without evaluations)",
+    ],
+}
+
+ALL_FEATURES: list[str] = [c for cols in FEATURE_GROUPS.values() for c in cols]
+assert len(ALL_FEATURES) == 36, f"expected 36 features, got {len(ALL_FEATURES)}"
+
+# Feature scopes for "how early can we predict?" analysis
+FEATURE_SCOPES: dict[str, list[str]] = {
+    "Enrollment only (early prediction)": [
+        *FEATURE_GROUPS["Demographics & admission"],
+        *FEATURE_GROUPS["Socioeconomic"],
+        *FEATURE_GROUPS["Macroeconomic"],
+    ],
+    "Enrollment + 1st semester": [
+        *FEATURE_GROUPS["Demographics & admission"],
+        *FEATURE_GROUPS["Socioeconomic"],
+        *FEATURE_GROUPS["Macroeconomic"],
+        *FEATURE_GROUPS["1st semester performance"],
+    ],
+    "All features (incl. 2nd semester)": ALL_FEATURES,
+}
+
+CATEGORICAL_FEATURES = [
+    "Marital status",
+    "Application mode",
+    "Course",
+    "Daytime/evening attendance",
+    "Previous qualification",
+    "Nationality",
+    "Mother's qualification",
+    "Father's qualification",
+    "Mother's occupation",
+    "Father's occupation",
+]
+
+BINARY_FEATURES = [
+    "Displaced",
+    "Educational special needs",
+    "Debtor",
+    "Tuition fees up to date",
+    "Gender",
+    "Scholarship holder",
+    "International",
+]
+
+CONTINUOUS_FEATURES = [
+    "Application order",
+    "Previous qualification (grade)",
+    "Admission grade",
+    "Age at enrollment",
+    *[c for cols in FEATURE_GROUPS.values() for c in cols if "Curricular" in c],
+    "Unemployment rate",
+    "Inflation rate",
+    "GDP",
+]
+
+YES_NO = {0: "No", 1: "Yes"}
+GENDER = {0: "Female", 1: "Male"}
+
+# --------------------------------------------------------------------------- #
+# Code → label mappings (UCI id-697 documentation, Realinho et al. 2022)
+# --------------------------------------------------------------------------- #
+MAPPINGS: dict[str, dict[int, str]] = {
+    "Marital status": {
+        1: "Single",
+        2: "Married",
+        3: "Widower",
+        4: "Divorced",
+        5: "Facto union",
+        6: "Legally separated",
+    },
+    "Application mode": {
+        1: "1st phase – general contingent",
+        2: "Ordinance No. 612/93",
+        5: "1st phase – special contingent (Azores)",
+        7: "Holders of other higher courses",
+        10: "Ordinance No. 854-B/99",
+        15: "International student (bachelor)",
+        16: "1st phase – special contingent (Madeira)",
+        17: "2nd phase – general contingent",
+        18: "3rd phase – general contingent",
+        26: "Ordinance No. 533-A/99, item b2 (Different Plan)",
+        27: "Ordinance No. 533-A/99, item b3 (Other Institution)",
+        39: "Over 23 years old",
+        42: "Transfer",
+        43: "Change of course",
+        44: "Technological specialization diploma holders",
+        51: "Change of institution/course",
+        53: "Short cycle diploma holders",
+        57: "Change of institution/course (International)",
+    },
+    "Course": {
+        33: "Biofuel Production Technologies",
+        171: "Animation and Multimedia Design",
+        8014: "Social Service (evening)",
+        9003: "Agronomy",
+        9070: "Communication Design",
+        9085: "Veterinary Nursing",
+        9119: "Informatics Engineering",
+        9130: "Equinculture",
+        9147: "Management",
+        9238: "Social Service",
+        9254: "Tourism",
+        9500: "Nursing",
+        9556: "Oral Hygiene",
+        9670: "Advertising and Marketing Management",
+        9773: "Journalism and Communication",
+        9853: "Basic Education",
+        9991: "Management (evening)",
+    },
+    "Daytime/evening attendance": {0: "Evening", 1: "Daytime"},
+    "Previous qualification": {
+        1: "Secondary education (12th year)",
+        2: "Higher education – bachelor's",
+        3: "Higher education – degree",
+        4: "Higher education – master's",
+        5: "Higher education – doctorate",
+        6: "Frequency of higher education",
+        9: "12th year – not completed",
+        10: "11th year – not completed",
+        12: "Other – 11th year",
+        14: "10th year",
+        15: "10th year – not completed",
+        19: "Basic ed. 3rd cycle (9th–11th yr)",
+        38: "Basic ed. 2nd cycle (6th–8th yr)",
+        39: "Technological specialization course",
+        40: "Higher education – degree (1st cycle)",
+        42: "Professional higher technical course",
+        43: "Higher education – master (2nd cycle)",
+    },
+    "Nationality": {
+        1: "Portuguese",
+        2: "German",
+        6: "Spanish",
+        11: "Italian",
+        13: "Dutch",
+        14: "English",
+        17: "Lithuanian",
+        21: "Angolan",
+        22: "Cape Verdean",
+        24: "Guinean",
+        25: "Mozambican",
+        26: "Santomean",
+        32: "Turkish",
+        41: "Brazilian",
+        62: "Romanian",
+        100: "Moldovan",
+        101: "Mexican",
+        103: "Ukrainian",
+        105: "Russian",
+        108: "Cuban",
+        109: "Colombian",
+    },
+    "Mother's qualification": {
+        1: "Secondary ed. (12th year)",
+        2: "Higher ed. – bachelor's",
+        3: "Higher ed. – degree",
+        4: "Higher ed. – master's",
+        5: "Higher ed. – doctorate",
+        6: "Frequency of higher ed.",
+        9: "12th year – not completed",
+        10: "11th year – not completed",
+        11: "7th year (old)",
+        12: "Other – 11th year",
+        14: "10th year",
+        18: "General commerce course",
+        19: "Basic ed. 3rd cycle",
+        22: "Technical-professional course",
+        26: "7th year of schooling",
+        27: "2nd cycle general high school",
+        29: "9th year – not completed",
+        30: "8th year of schooling",
+        34: "Unknown",
+        35: "Can't read or write",
+        36: "Reads without 4th year",
+        37: "Basic ed. 1st cycle (4th/5th yr)",
+        38: "Basic ed. 2nd cycle (6th–8th yr)",
+        39: "Technological specialization course",
+        40: "Higher ed. – degree (1st cycle)",
+        41: "Specialized higher studies course",
+        42: "Professional higher technical course",
+        43: "Higher ed. – master (2nd cycle)",
+        44: "Higher ed. – doctorate (3rd cycle)",
+    },
+    "Father's qualification": {
+        1: "Secondary ed. (12th year)",
+        2: "Higher ed. – bachelor's",
+        3: "Higher ed. – degree",
+        4: "Higher ed. – master's",
+        5: "Higher ed. – doctorate",
+        6: "Frequency of higher ed.",
+        9: "12th year – not completed",
+        10: "11th year – not completed",
+        11: "7th year (old)",
+        12: "Other – 11th year",
+        13: "2nd yr complementary high school",
+        14: "10th year",
+        18: "General commerce course",
+        19: "Basic ed. 3rd cycle",
+        20: "Complementary high school course",
+        22: "Technical-professional course",
+        25: "Complementary high school – not concluded",
+        26: "7th year of schooling",
+        27: "2nd cycle general high school",
+        29: "9th year – not completed",
+        30: "8th year of schooling",
+        31: "General course of administration & commerce",
+        33: "Supplementary accounting & administration",
+        34: "Unknown",
+        35: "Can't read or write",
+        36: "Reads without 4th year",
+        37: "Basic ed. 1st cycle (4th/5th yr)",
+        38: "Basic ed. 2nd cycle (6th–8th yr)",
+        39: "Technological specialization course",
+        40: "Higher ed. – degree (1st cycle)",
+        41: "Specialized higher studies course",
+        42: "Professional higher technical course",
+        43: "Higher ed. – master (2nd cycle)",
+        44: "Higher ed. – doctorate (3rd cycle)",
+    },
+    "Mother's occupation": {
+        0: "Student",
+        1: "Legislative reps / executive bodies / directors",
+        2: "Specialists in intellectual & scientific activities",
+        3: "Intermediate-level technicians & professions",
+        4: "Administrative staff",
+        5: "Personal services, security & safety, sellers",
+        6: "Farmers & skilled workers in agriculture/fisheries/forestry",
+        7: "Skilled workers in industry, construction & craftsmen",
+        8: "Installation & machine operators, assembly workers",
+        9: "Unskilled workers",
+        10: "Armed forces professions",
+        90: "Other situation",
+        99: "(Blank)",
+        101: "Armed forces officers",
+        102: "Armed forces sergeants",
+        103: "Other armed forces personnel",
+        112: "Directors of administrative & commercial services",
+        114: "Hotel, catering, trade & other services directors",
+        121: "Physical sciences, mathematics & engineering specialists",
+        122: "Health professionals",
+        123: "Teachers",
+        124: "Finance, accounting & administrative specialists",
+        125: "ICT specialists",
+        131: "Science & engineering intermediate technicians",
+        132: "Health intermediate technicians & professionals",
+        134: "Legal, social, sports & cultural intermediate technicians",
+        135: "ICT technicians",
+        141: "Office workers, secretaries & data processing operators",
+        143: "Data, accounting, statistical & financial operators",
+        144: "Other administrative support staff",
+        151: "Personal service workers",
+        152: "Sellers",
+        153: "Personal care workers",
+        154: "Protection & security services personnel",
+        161: "Market-oriented farmers & animal production workers",
+        163: "Subsistence farmers, fishermen, hunters & gatherers",
+        171: "Skilled construction workers (excl. electricians)",
+        172: "Skilled metallurgy & metalworkers",
+        173: "Printing, precision instruments, jewelers, artisans",
+        174: "Skilled electricity & electronics workers",
+        175: "Food processing, woodworking, clothing & crafts workers",
+        181: "Fixed plant & machine operators",
+        182: "Assembly workers",
+        183: "Vehicle drivers & mobile equipment operators",
+        191: "Cleaning workers",
+        192: "Unskilled agriculture/animal production/fisheries workers",
+        193: "Unskilled extractive/construction/manufacturing/transport",
+        194: "Meal preparation assistants",
+        195: "Street vendors (except food) & street service providers",
+    },
+}
+
+MAPPINGS["Father's occupation"] = MAPPINGS["Mother's occupation"]
+MAPPINGS["Displaced"] = YES_NO
+MAPPINGS["Educational special needs"] = YES_NO
+MAPPINGS["Debtor"] = YES_NO
+MAPPINGS["Tuition fees up to date"] = YES_NO
+MAPPINGS["Gender"] = GENDER
+MAPPINGS["Scholarship holder"] = YES_NO
+MAPPINGS["International"] = YES_NO
+
+# Binary variables use Yes/No (Gender uses Female/Male via GENDER above).
+YES_NO_FEATURES = [f for f in BINARY_FEATURES if f != "Gender"]
+
+VARIABLE_DESCRIPTIONS = {
+    "Marital status": "1 single … 6 legally separated",
+    "Application mode": "Admission pathway (18 codes)",
+    "Application order": "0 = first choice … 9 = last choice",
+    "Course": "Undergraduate degree (17 codes)",
+    "Daytime/evening attendance": "1 daytime, 0 evening",
+    "Previous qualification": "Qualification before enrolment (17 codes)",
+    "Previous qualification (grade)": "0–200 scale",
+    "Nationality": "21 nationality codes",
+    "Mother's qualification": "Parental education (code)",
+    "Father's qualification": "Parental education (code)",
+    "Mother's occupation": "Parental occupation (code)",
+    "Father's occupation": "Parental occupation (code)",
+    "Admission grade": "0–200 scale",
+    "Displaced": "1 if student moved from home region",
+    "Educational special needs": "1 if yes",
+    "Debtor": "1 if fees owed",
+    "Tuition fees up to date": "1 if yes",
+    "Gender": "1 male, 0 female",
+    "Scholarship holder": "1 if yes",
+    "Age at enrollment": "Years at enrolment",
+    "International": "1 if yes",
+    "Unemployment rate": "Cohort-year %, PORDATA",
+    "Inflation rate": "Cohort-year %, PORDATA",
+    "GDP": "Cohort-year % change, PORDATA",
+}
+
+
+def short(label: str, width: int = 34) -> str:
+    """Truncate long category labels for chart axes."""
+    return label if len(label) <= width else label[: width - 1] + "…"
+
+
+def with_labels(df: pd.DataFrame, column: str) -> pd.Series:
+    """Map an integer-coded column to readable labels (codes without an
+    entry in the mapping fall back to the raw code)."""
+    mapping = MAPPINGS.get(column)
+    if mapping is None:
+        return df[column]
+    return df[column].map(mapping).fillna(df[column].astype(str))
+
+
+# --------------------------------------------------------------------------- #
+# Loading
+# --------------------------------------------------------------------------- #
+@st.cache_data
+def load_data() -> pd.DataFrame:
+    """Load the cleaned dataset (see scripts/prepare_data.py)."""
+    if CLEAN_DATA_PATH.exists():
+        df = pd.read_csv(CLEAN_DATA_PATH)
+    elif RAW_DATA_PATH.exists():
+        df = _clean_raw(pd.read_csv(RAW_DATA_PATH, sep=";"))
+    else:  # pragma: no cover - network fallback
+        df = _fetch_ucirepo()
+    return df
+
+
+def _clean_raw(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    df.columns = [c.strip() for c in df.columns]
+    df = df.rename(columns={"Nacionality": "Nationality"})
+    return df
+
+
+def _fetch_ucirepo() -> pd.DataFrame:  # pragma: no cover
+    from ucimlrepo import fetch_ucirepo
+
+    ds = fetch_ucirepo(id=697)
+    df = pd.concat([ds.data.features, ds.data.targets], axis=1)
+    return df.rename(columns={"Nacionality": "Nationality"})
