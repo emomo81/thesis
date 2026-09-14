@@ -13,3 +13,9 @@ venv/
 # Experiment outputs
 models/
 *.joblib
+
+# The small, release-ready inference bundles are intentionally versioned.
+!artifacts/*.joblib
+.pytest_cache/
+release/
+.cache/

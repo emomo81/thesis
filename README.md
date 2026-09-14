@@ -1,64 +1,128 @@
-# Student Dropout & Academic Success — Thesis Dashboard (Streamlit)
+# Student Outcome Predictor
 
-Interactive **Streamlit** dashboard for the UCI Machine Learning Repository dataset
-[*“Predict Students’ Dropout and Academic Success”* (id 697)](https://archive.ics.uci.edu/dataset/697) —
-4,424 undergraduate records from a Portuguese higher-education institution
-(academic years 2008/09–2018/19), 36 attributes, 3-class target
-(*Dropout / Enrolled / Graduate*).
+A **prediction-only dashboard with pre-trained models included**. Enter one
+student or upload a CSV; receive Dropout / Enrolled / Graduate predictions and
+estimated probabilities. No training, data preparation, model selection, or
+training-data download is required to use it.
 
-## Pages
+## Open the dashboard
 
-| Page | What it does |
-|---|---|
-| 🎓 **Overview** (`app.py`) | Dataset card, KPIs, outcome distribution |
-| 📋 **Data Explorer** | Filterable record table, variable dictionary, per-variable profiling, CSV export |
-| 📊 **Exploratory Analysis** | Outcome gaps across demographics/socioeconomics, age & grades, macroeconomic context, correlation heatmap |
-| 🤖 **Model Training** | Logistic Regression vs Random Forest vs Hist Gradient Boosting; comparison metrics, confusion matrix, ROC curves, permutation importance; 3-class or binary (Dropout vs rest); feature scopes for early-prediction scenarios |
-| 🔮 **Predict Student** | Score a single student profile from an interactive form, or batch-score an uploaded CSV |
+Install **Python 3.11 or 3.12** first. Extract the release ZIP (do not run from
+inside the ZIP), then:
 
-## Run it
+- **Windows:** double-click `Start Dashboard.bat`.
+- **macOS:** double-click `Start Dashboard.command` (if blocked, use the terminal
+  command below; downloaded scripts may require permission).
+- **Linux / any terminal:** run `python3 launch.py` inside the extracted folder
+  (`python launch.py` on Windows).
+
+The launcher creates a private `.venv`, installs the pinned dependencies on the
+first run, verifies the packaged models, and opens **http://localhost:8501**.
+First setup requires internet; subsequent launches work offline. Keep the
+launcher window open while using the dashboard. **Ctrl+C** stops it.
+The download includes model files, not a standalone Python executable.
+
+If the browser does not open automatically, visit http://localhost:8501 yourself.
+The dashboard must be started on the computer serving it. The server binds to
+`0.0.0.0` for hosted previews; use a firewall/private network for personal use.
+For loopback-only manual use, add `--server.address=127.0.0.1` to the Streamlit
+command below. Do not expose real student records on an unauthenticated public
+server. Authentication/TLS must be provided by your hosting platform or proxy.
+
+### Already have a Python environment?
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-.venv/bin/streamlit run app.py
+python -m pip install -r requirements.lock
+python -m streamlit run app.py
 ```
 
-Then open http://localhost:8501.
-
-## Data pipeline
+### Docker (optional, requires Docker)
 
 ```bash
-.venv/bin/python scripts/prepare_data.py
+docker build -t student-outcome-predictor .
+docker run --rm -p 127.0.0.1:8501:8501 student-outcome-predictor
 ```
 
-Reads `data/raw/data.csv` (semicolon-separated, as distributed on UCI — already
-committed here) and writes the normalized `data/students.csv` used by the app.
-If the raw file is missing, the script re-fetches the dataset via
-`ucimlrepo.fetch_ucirepo(id=697)`.
+## Make predictions
 
-**Provenance:** Realinho, V.; Machado, J.; Baptista, L.; Martins, M.V.
-“Predicting Student Dropout and Academic Success”, *Data* 2022, 7(11), 146 —
-DOI [10.24432/C5MC89](https://doi.org/10.24432/C5MC89), licensed **CC BY 4.0**.
-Category code → label dictionaries follow the official dataset documentation.
+1. Choose **At enrollment**, **After 1st semester**, or **After 2nd semester**.
+   Only use information actually available at that time; later stages require
+   real completed-semester results.
+2. For a single student, replace the example defaults, confirm you reviewed
+   them, and click **Predict outcome**.
+3. For a batch, download that stage's template, replace the example row(s),
+   upload the CSV, and click **Predict uploaded students**.
+4. Download the results as CSV, if wanted.
 
-Citation for the dataset paper:
-M.V. Martins, D. Tolledo, J. Machado, L.M.T. Baptista, V. Realinho (2021),
-“Early prediction of student’s performance in higher education: a case study”,
-*Trends and Applications in Information Systems and Technologies*, Springer.
+CSV files must be UTF-8 with a header and comma or semicolon separators.
+The limit is **10 MB / 10,000 students**. Categorical features use the numeric
+codes shown beside the labels in the form. Missing columns/values, invalid
+codes, non-finite numbers and impossible counts are rejected, never silently
+filled. Errors use student row numbers starting at 1, excluding the header.
+Extra columns, including `Target`, are ignored for prediction and retained in
+exports. Existing `Predicted outcome` and `P(...)` columns are overwritten.
+Exported text is escaped when necessary to avoid spreadsheet formula execution.
 
-## Repository layout
+Results are based on the **last submitted profile**. Edit and submit again to
+update a result. No arbitrary high/low risk thresholds are applied.
 
+## What is packaged?
+
+- `artifacts/*.joblib`: three ready-to-use preprocessing + classifier pipelines.
+- `artifacts/manifest.json`: input schemas/defaults, class order, hashes,
+  dependency versions, validation comparisons and held-out metrics.
+- `app.py` and `dashboard/inference.py`: inference only; never fit a model.
+- `requirements.lock`: exact runtime dependencies used for verification.
+- `MODEL_CARD.md`: evaluation and limitations.
+
+Only trusted bundled models are loaded. Joblib is pickle-based: **never replace
+these files with untrusted uploads**. Checksums catch corruption, not malicious
+replacement of both model and manifest. Missing/incompatible models stop with
+an actionable error; they are never silently retrained.
+
+The application does not write uploaded records to disk or send them to a
+third-party prediction API. Streamlit keeps data in server/session memory for
+interaction/download. Avoid direct identifiers and use a private deployment.
+
+## Limitations and attribution
+
+This is a research decision-support tool, **not a validated student screening
+system**. Model probabilities are uncalibrated estimates, not guarantees.
+The training data includes sensitive demographic and socioeconomic attributes;
+local validation, subgroup fairness assessment and human review are required
+before real-world use. Never use these outputs alone to deny admission, funding,
+or student support. See [MODEL_CARD.md](MODEL_CARD.md).
+
+Dataset: Realinho, V.; Machado, J.; Baptista, L.; Martins, M.V.,
+“Predicting Student Dropout and Academic Success”, *Data* 2022, 7(11), 146.
+UCI dataset 697, DOI [10.24432/C5MC89](https://doi.org/10.24432/C5MC89),
+**CC BY 4.0**. Contains 4,424 records from one Portuguese higher-education
+institution, 36 features, and three outcome classes. Dataset headers were
+normalized; the release ZIP does not contain student-level training records.
+
+## Maintainers only — not needed to use the dashboard
+
+These commands are for the full source checkout, not the prediction-only ZIP.
+The original research pages were removed from the dashboard; offline utilities
+and the source data remain in the repository.
+
+```bash
+# Optional: regenerate normalized data from the committed raw CSV
+python scripts/prepare_data.py
+# Offline model comparison, training, evaluation and packaging
+python scripts/package_models.py
+# Regression tests (also exercises the dashboard)
+python -m pip install pytest==8.4.2
+python -m pytest -q
+# Build release/student-outcome-predictor.zip without data or training code
+python scripts/build_release.py
+# Verify installation and run all three packaged models, without a browser
+python launch.py --check
 ```
-├── app.py                    # Streamlit entry point (Overview page)
-├── pages/                    # Multipage Streamlit pages (1–4)
-├── dashboard/
-│   ├── data.py               # Loading, feature groups, code→label mappings
-│   └── modeling.py           # Training/evaluation utilities
-├── scripts/prepare_data.py   # raw → clean dataset builder
-├── data/
-│   ├── raw/data.csv          # Original UCI distribution (unmodified)
-│   └── students.csv          # Cleaned dataset used by the app
-├── .streamlit/config.toml    # Theme & server config
-└── requirements.txt
-```
+
+Changing model/runtime versions requires regenerating the bundles and updating
+`requirements.txt`, `requirements.lock`, and `MODEL_CARD.md` together. Training
+uses a fixed stratified 80/20 split. Selection uses three-fold CV macro F1 only
+on the training partition. Selected models are fitted on that partition and
+packaged **without fitting the held-out test rows**, so reported test metrics
+apply to the actual shipped models. See the manifest for full results.

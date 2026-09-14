@@ -19,7 +19,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
-from dashboard.data import ALL_FEATURES, TARGET_COL
+from dashboard.schema import ALL_FEATURES, TARGET_COL
 
 MODELS = {
     "Logistic Regression": "logreg",
