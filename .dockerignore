@@ -1,0 +1,13 @@
+*
+!Dockerfile
+!requirements.lock
+!app.py
+!dashboard/
+!dashboard/__init__.py
+!dashboard/schema.py
+!dashboard/inference.py
+!artifacts/
+!artifacts/*.joblib
+!artifacts/manifest.json
+!.streamlit/
+!.streamlit/config.toml

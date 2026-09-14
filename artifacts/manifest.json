@@ -1,0 +1,1830 @@
+{
+  "format_version": 1,
+  "created_at": "2026-09-14T14:07:51.820132+00:00",
+  "python_version": "3.11.2",
+  "versions": {
+    "scikit-learn": "1.7.2",
+    "numpy": "2.2.6",
+    "pandas": "2.3.2",
+    "joblib": "1.5.2"
+  },
+  "dataset": {
+    "name": "UCI Predict Students\u2019 Dropout and Academic Success (697)",
+    "doi": "10.24432/C5MC89",
+    "license": "CC BY 4.0",
+    "sha256": "5dc4e06abf77b44021577cdf7553ff447f1894b614a8c6dedbe6552d444bded5",
+    "rows": 4424
+  },
+  "evaluation": {
+    "seed": 42,
+    "training_rows": 3539,
+    "test_rows": 885,
+    "selection": "3-fold stratified CV macro F1 on training partition only",
+    "packaged_fit": "80% training partition; the 20% test partition is never fitted"
+  },
+  "models": {
+    "enrollment": {
+      "label": "Enrollment only (early prediction)",
+      "estimator": "Logistic Regression",
+      "file": "enrollment.joblib",
+      "sha256": "c53c9ce44331714f9494ef4febf758b74f1b7eed18f99ab0108bfe6eb0bfb2b3",
+      "features": [
+        "Marital status",
+        "Application mode",
+        "Application order",
+        "Course",
+        "Daytime/evening attendance",
+        "Previous qualification",
+        "Previous qualification (grade)",
+        "Nationality",
+        "Displaced",
+        "Gender",
+        "Age at enrollment",
+        "International",
+        "Admission grade",
+        "Mother's qualification",
+        "Father's qualification",
+        "Mother's occupation",
+        "Father's occupation",
+        "Educational special needs",
+        "Debtor",
+        "Tuition fees up to date",
+        "Scholarship holder",
+        "Unemployment rate",
+        "Inflation rate",
+        "GDP"
+      ],
+      "classes": [
+        "Dropout",
+        "Enrolled",
+        "Graduate"
+      ],
+      "schema": {
+        "Marital status": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 6.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "Application mode": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 57.0,
+          "options": [
+            1,
+            2,
+            5,
+            7,
+            10,
+            15,
+            16,
+            17,
+            18,
+            26,
+            27,
+            39,
+            42,
+            43,
+            44,
+            51,
+            53,
+            57
+          ]
+        },
+        "Application order": {
+          "kind": "integer",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 9.0,
+          "min": 0,
+          "max": 9
+        },
+        "Course": {
+          "kind": "category",
+          "default": 9500,
+          "observed_min": 33.0,
+          "observed_max": 9991.0,
+          "options": [
+            33,
+            171,
+            8014,
+            9003,
+            9070,
+            9085,
+            9119,
+            9130,
+            9147,
+            9238,
+            9254,
+            9500,
+            9556,
+            9670,
+            9773,
+            9853,
+            9991
+          ]
+        },
+        "Daytime/evening attendance": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Previous qualification": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 43.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            10,
+            12,
+            14,
+            15,
+            19,
+            38,
+            39,
+            40,
+            42,
+            43
+          ]
+        },
+        "Previous qualification (grade)": {
+          "kind": "number",
+          "default": 133.1,
+          "observed_min": 95.0,
+          "observed_max": 190.0,
+          "min": 0,
+          "max": 200
+        },
+        "Nationality": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 108.0,
+          "options": [
+            1,
+            2,
+            6,
+            11,
+            13,
+            14,
+            17,
+            21,
+            22,
+            24,
+            25,
+            26,
+            32,
+            41,
+            62,
+            100,
+            101,
+            103,
+            105,
+            108,
+            109
+          ]
+        },
+        "Displaced": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Gender": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Age at enrollment": {
+          "kind": "integer",
+          "default": 20,
+          "observed_min": 17.0,
+          "observed_max": 70.0,
+          "min": 1,
+          "max": 120
+        },
+        "International": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Admission grade": {
+          "kind": "number",
+          "default": 126.0,
+          "observed_min": 95.0,
+          "observed_max": 190.0,
+          "min": 0,
+          "max": 200
+        },
+        "Mother's qualification": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 44.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            10,
+            11,
+            12,
+            14,
+            18,
+            19,
+            22,
+            26,
+            27,
+            29,
+            30,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        "Father's qualification": {
+          "kind": "category",
+          "default": 37,
+          "observed_min": 1.0,
+          "observed_max": 44.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            18,
+            19,
+            20,
+            22,
+            25,
+            26,
+            27,
+            29,
+            30,
+            31,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        "Mother's occupation": {
+          "kind": "category",
+          "default": 9,
+          "observed_min": 0.0,
+          "observed_max": 194.0,
+          "options": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            90,
+            99,
+            101,
+            102,
+            103,
+            112,
+            114,
+            121,
+            122,
+            123,
+            124,
+            125,
+            131,
+            132,
+            134,
+            135,
+            141,
+            143,
+            144,
+            151,
+            152,
+            153,
+            154,
+            161,
+            163,
+            171,
+            172,
+            173,
+            174,
+            175,
+            181,
+            182,
+            183,
+            191,
+            192,
+            193,
+            194,
+            195
+          ]
+        },
+        "Father's occupation": {
+          "kind": "category",
+          "default": 9,
+          "observed_min": 0.0,
+          "observed_max": 195.0,
+          "options": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            90,
+            99,
+            101,
+            102,
+            103,
+            112,
+            114,
+            121,
+            122,
+            123,
+            124,
+            125,
+            131,
+            132,
+            134,
+            135,
+            141,
+            143,
+            144,
+            151,
+            152,
+            153,
+            154,
+            161,
+            163,
+            171,
+            172,
+            173,
+            174,
+            175,
+            181,
+            182,
+            183,
+            191,
+            192,
+            193,
+            194,
+            195
+          ]
+        },
+        "Educational special needs": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Debtor": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Tuition fees up to date": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Scholarship holder": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Unemployment rate": {
+          "kind": "number",
+          "default": 11.1,
+          "observed_min": 7.6,
+          "observed_max": 16.2,
+          "min": 0,
+          "max": 100
+        },
+        "Inflation rate": {
+          "kind": "number",
+          "default": 1.4,
+          "observed_min": -0.8,
+          "observed_max": 3.7
+        },
+        "GDP": {
+          "kind": "number",
+          "default": 0.32,
+          "observed_min": -4.06,
+          "observed_max": 3.51
+        }
+      },
+      "comparison": {
+        "Logistic Regression": {
+          "cv_macro_f1": 0.5630792459935887,
+          "cv_std": 0.016187811221109256
+        },
+        "Random Forest": {
+          "cv_macro_f1": 0.5582433378203094,
+          "cv_std": 0.018413703256833884
+        },
+        "Hist Gradient Boosting": {
+          "cv_macro_f1": 0.5476029123549795,
+          "cv_std": 0.011935390038370693
+        }
+      },
+      "test_metrics": {
+        "accuracy": 0.5728813559322034,
+        "balanced_accuracy": 0.5616481600169522,
+        "macro_f1": 0.5492394680258023,
+        "classification_report": {
+          "Dropout": {
+            "precision": 0.6846473029045643,
+            "recall": 0.5809859154929577,
+            "f1-score": 0.6285714285714286,
+            "support": 284.0
+          },
+          "Enrolled": {
+            "precision": 0.29927007299270075,
+            "recall": 0.5157232704402516,
+            "f1-score": 0.3787528868360277,
+            "support": 159.0
+          },
+          "Graduate": {
+            "precision": 0.7027027027027027,
+            "recall": 0.5882352941176471,
+            "f1-score": 0.6403940886699507,
+            "support": 442.0
+          },
+          "accuracy": 0.5728813559322034,
+          "macro avg": {
+            "precision": 0.5622066928666559,
+            "recall": 0.5616481600169522,
+            "f1-score": 0.5492394680258023,
+            "support": 885.0
+          },
+          "weighted avg": {
+            "precision": 0.6244275369777743,
+            "recall": 0.5728813559322034,
+            "f1-score": 0.589593425890771,
+            "support": 885.0
+          }
+        },
+        "confusion_matrix": [
+          [
+            165,
+            65,
+            54
+          ],
+          [
+            21,
+            82,
+            56
+          ],
+          [
+            55,
+            127,
+            260
+          ]
+        ]
+      }
+    },
+    "semester1": {
+      "label": "Enrollment + 1st semester",
+      "estimator": "Logistic Regression",
+      "file": "semester1.joblib",
+      "sha256": "5bb115e0d43bf6f8c3028893ae0916d868d2287b3d906293b9eb7e00e5cdaf05",
+      "features": [
+        "Marital status",
+        "Application mode",
+        "Application order",
+        "Course",
+        "Daytime/evening attendance",
+        "Previous qualification",
+        "Previous qualification (grade)",
+        "Nationality",
+        "Displaced",
+        "Gender",
+        "Age at enrollment",
+        "International",
+        "Admission grade",
+        "Mother's qualification",
+        "Father's qualification",
+        "Mother's occupation",
+        "Father's occupation",
+        "Educational special needs",
+        "Debtor",
+        "Tuition fees up to date",
+        "Scholarship holder",
+        "Unemployment rate",
+        "Inflation rate",
+        "GDP",
+        "Curricular units 1st sem (credited)",
+        "Curricular units 1st sem (enrolled)",
+        "Curricular units 1st sem (evaluations)",
+        "Curricular units 1st sem (approved)",
+        "Curricular units 1st sem (grade)",
+        "Curricular units 1st sem (without evaluations)"
+      ],
+      "classes": [
+        "Dropout",
+        "Enrolled",
+        "Graduate"
+      ],
+      "schema": {
+        "Marital status": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 6.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "Application mode": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 57.0,
+          "options": [
+            1,
+            2,
+            5,
+            7,
+            10,
+            15,
+            16,
+            17,
+            18,
+            26,
+            27,
+            39,
+            42,
+            43,
+            44,
+            51,
+            53,
+            57
+          ]
+        },
+        "Application order": {
+          "kind": "integer",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 9.0,
+          "min": 0,
+          "max": 9
+        },
+        "Course": {
+          "kind": "category",
+          "default": 9500,
+          "observed_min": 33.0,
+          "observed_max": 9991.0,
+          "options": [
+            33,
+            171,
+            8014,
+            9003,
+            9070,
+            9085,
+            9119,
+            9130,
+            9147,
+            9238,
+            9254,
+            9500,
+            9556,
+            9670,
+            9773,
+            9853,
+            9991
+          ]
+        },
+        "Daytime/evening attendance": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Previous qualification": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 43.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            10,
+            12,
+            14,
+            15,
+            19,
+            38,
+            39,
+            40,
+            42,
+            43
+          ]
+        },
+        "Previous qualification (grade)": {
+          "kind": "number",
+          "default": 133.1,
+          "observed_min": 95.0,
+          "observed_max": 190.0,
+          "min": 0,
+          "max": 200
+        },
+        "Nationality": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 108.0,
+          "options": [
+            1,
+            2,
+            6,
+            11,
+            13,
+            14,
+            17,
+            21,
+            22,
+            24,
+            25,
+            26,
+            32,
+            41,
+            62,
+            100,
+            101,
+            103,
+            105,
+            108,
+            109
+          ]
+        },
+        "Displaced": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Gender": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Age at enrollment": {
+          "kind": "integer",
+          "default": 20,
+          "observed_min": 17.0,
+          "observed_max": 70.0,
+          "min": 1,
+          "max": 120
+        },
+        "International": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Admission grade": {
+          "kind": "number",
+          "default": 126.0,
+          "observed_min": 95.0,
+          "observed_max": 190.0,
+          "min": 0,
+          "max": 200
+        },
+        "Mother's qualification": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 44.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            10,
+            11,
+            12,
+            14,
+            18,
+            19,
+            22,
+            26,
+            27,
+            29,
+            30,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        "Father's qualification": {
+          "kind": "category",
+          "default": 37,
+          "observed_min": 1.0,
+          "observed_max": 44.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            18,
+            19,
+            20,
+            22,
+            25,
+            26,
+            27,
+            29,
+            30,
+            31,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        "Mother's occupation": {
+          "kind": "category",
+          "default": 9,
+          "observed_min": 0.0,
+          "observed_max": 194.0,
+          "options": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            90,
+            99,
+            101,
+            102,
+            103,
+            112,
+            114,
+            121,
+            122,
+            123,
+            124,
+            125,
+            131,
+            132,
+            134,
+            135,
+            141,
+            143,
+            144,
+            151,
+            152,
+            153,
+            154,
+            161,
+            163,
+            171,
+            172,
+            173,
+            174,
+            175,
+            181,
+            182,
+            183,
+            191,
+            192,
+            193,
+            194,
+            195
+          ]
+        },
+        "Father's occupation": {
+          "kind": "category",
+          "default": 9,
+          "observed_min": 0.0,
+          "observed_max": 195.0,
+          "options": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            90,
+            99,
+            101,
+            102,
+            103,
+            112,
+            114,
+            121,
+            122,
+            123,
+            124,
+            125,
+            131,
+            132,
+            134,
+            135,
+            141,
+            143,
+            144,
+            151,
+            152,
+            153,
+            154,
+            161,
+            163,
+            171,
+            172,
+            173,
+            174,
+            175,
+            181,
+            182,
+            183,
+            191,
+            192,
+            193,
+            194,
+            195
+          ]
+        },
+        "Educational special needs": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Debtor": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Tuition fees up to date": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Scholarship holder": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Unemployment rate": {
+          "kind": "number",
+          "default": 11.1,
+          "observed_min": 7.6,
+          "observed_max": 16.2,
+          "min": 0,
+          "max": 100
+        },
+        "Inflation rate": {
+          "kind": "number",
+          "default": 1.4,
+          "observed_min": -0.8,
+          "observed_max": 3.7
+        },
+        "GDP": {
+          "kind": "number",
+          "default": 0.32,
+          "observed_min": -4.06,
+          "observed_max": 3.51
+        },
+        "Curricular units 1st sem (credited)": {
+          "kind": "integer",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 20.0,
+          "min": 0
+        },
+        "Curricular units 1st sem (enrolled)": {
+          "kind": "integer",
+          "default": 6,
+          "observed_min": 0.0,
+          "observed_max": 26.0,
+          "min": 0
+        },
+        "Curricular units 1st sem (evaluations)": {
+          "kind": "integer",
+          "default": 8,
+          "observed_min": 0.0,
+          "observed_max": 45.0,
+          "min": 0
+        },
+        "Curricular units 1st sem (approved)": {
+          "kind": "integer",
+          "default": 5,
+          "observed_min": 0.0,
+          "observed_max": 26.0,
+          "min": 0
+        },
+        "Curricular units 1st sem (grade)": {
+          "kind": "number",
+          "default": 12.32,
+          "observed_min": 0.0,
+          "observed_max": 18.875,
+          "min": 0,
+          "max": 20
+        },
+        "Curricular units 1st sem (without evaluations)": {
+          "kind": "integer",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 12.0,
+          "min": 0
+        }
+      },
+      "comparison": {
+        "Logistic Regression": {
+          "cv_macro_f1": 0.6743155069957799,
+          "cv_std": 0.012063761594762244
+        },
+        "Random Forest": {
+          "cv_macro_f1": 0.6695676695144755,
+          "cv_std": 0.018271651158357934
+        },
+        "Hist Gradient Boosting": {
+          "cv_macro_f1": 0.66709403556364,
+          "cv_std": 0.01800634890015467
+        }
+      },
+      "test_metrics": {
+        "accuracy": 0.6994350282485876,
+        "balanced_accuracy": 0.6676760048991216,
+        "macro_f1": 0.6593182349248871,
+        "classification_report": {
+          "Dropout": {
+            "precision": 0.782258064516129,
+            "recall": 0.6830985915492958,
+            "f1-score": 0.7293233082706767,
+            "support": 284.0
+          },
+          "Enrolled": {
+            "precision": 0.38362068965517243,
+            "recall": 0.559748427672956,
+            "f1-score": 0.45524296675191817,
+            "support": 159.0
+          },
+          "Graduate": {
+            "precision": 0.8296296296296296,
+            "recall": 0.7601809954751131,
+            "f1-score": 0.7933884297520661,
+            "support": 442.0
+          },
+          "accuracy": 0.6994350282485876,
+          "macro avg": {
+            "precision": 0.6651694612669771,
+            "recall": 0.6676760048991216,
+            "f1-score": 0.6593182349248871,
+            "support": 885.0
+          },
+          "weighted avg": {
+            "precision": 0.73429748731531,
+            "recall": 0.6994350282485876,
+            "f1-score": 0.7120781211444523,
+            "support": 885.0
+          }
+        },
+        "confusion_matrix": [
+          [
+            194,
+            63,
+            27
+          ],
+          [
+            28,
+            89,
+            42
+          ],
+          [
+            26,
+            80,
+            336
+          ]
+        ]
+      }
+    },
+    "semester2": {
+      "label": "All features (incl. 2nd semester)",
+      "estimator": "Logistic Regression",
+      "file": "semester2.joblib",
+      "sha256": "6e929b848561da7f57a88965e01058edf45066e695dbdd3fe8de438148db2411",
+      "features": [
+        "Marital status",
+        "Application mode",
+        "Application order",
+        "Course",
+        "Daytime/evening attendance",
+        "Previous qualification",
+        "Previous qualification (grade)",
+        "Nationality",
+        "Displaced",
+        "Gender",
+        "Age at enrollment",
+        "International",
+        "Admission grade",
+        "Mother's qualification",
+        "Father's qualification",
+        "Mother's occupation",
+        "Father's occupation",
+        "Educational special needs",
+        "Debtor",
+        "Tuition fees up to date",
+        "Scholarship holder",
+        "Unemployment rate",
+        "Inflation rate",
+        "GDP",
+        "Curricular units 1st sem (credited)",
+        "Curricular units 1st sem (enrolled)",
+        "Curricular units 1st sem (evaluations)",
+        "Curricular units 1st sem (approved)",
+        "Curricular units 1st sem (grade)",
+        "Curricular units 1st sem (without evaluations)",
+        "Curricular units 2nd sem (credited)",
+        "Curricular units 2nd sem (enrolled)",
+        "Curricular units 2nd sem (evaluations)",
+        "Curricular units 2nd sem (approved)",
+        "Curricular units 2nd sem (grade)",
+        "Curricular units 2nd sem (without evaluations)"
+      ],
+      "classes": [
+        "Dropout",
+        "Enrolled",
+        "Graduate"
+      ],
+      "schema": {
+        "Marital status": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 6.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "Application mode": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 57.0,
+          "options": [
+            1,
+            2,
+            5,
+            7,
+            10,
+            15,
+            16,
+            17,
+            18,
+            26,
+            27,
+            39,
+            42,
+            43,
+            44,
+            51,
+            53,
+            57
+          ]
+        },
+        "Application order": {
+          "kind": "integer",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 9.0,
+          "min": 0,
+          "max": 9
+        },
+        "Course": {
+          "kind": "category",
+          "default": 9500,
+          "observed_min": 33.0,
+          "observed_max": 9991.0,
+          "options": [
+            33,
+            171,
+            8014,
+            9003,
+            9070,
+            9085,
+            9119,
+            9130,
+            9147,
+            9238,
+            9254,
+            9500,
+            9556,
+            9670,
+            9773,
+            9853,
+            9991
+          ]
+        },
+        "Daytime/evening attendance": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Previous qualification": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 43.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            10,
+            12,
+            14,
+            15,
+            19,
+            38,
+            39,
+            40,
+            42,
+            43
+          ]
+        },
+        "Previous qualification (grade)": {
+          "kind": "number",
+          "default": 133.1,
+          "observed_min": 95.0,
+          "observed_max": 190.0,
+          "min": 0,
+          "max": 200
+        },
+        "Nationality": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 108.0,
+          "options": [
+            1,
+            2,
+            6,
+            11,
+            13,
+            14,
+            17,
+            21,
+            22,
+            24,
+            25,
+            26,
+            32,
+            41,
+            62,
+            100,
+            101,
+            103,
+            105,
+            108,
+            109
+          ]
+        },
+        "Displaced": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Gender": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Age at enrollment": {
+          "kind": "integer",
+          "default": 20,
+          "observed_min": 17.0,
+          "observed_max": 70.0,
+          "min": 1,
+          "max": 120
+        },
+        "International": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Admission grade": {
+          "kind": "number",
+          "default": 126.0,
+          "observed_min": 95.0,
+          "observed_max": 190.0,
+          "min": 0,
+          "max": 200
+        },
+        "Mother's qualification": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 1.0,
+          "observed_max": 44.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            10,
+            11,
+            12,
+            14,
+            18,
+            19,
+            22,
+            26,
+            27,
+            29,
+            30,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        "Father's qualification": {
+          "kind": "category",
+          "default": 37,
+          "observed_min": 1.0,
+          "observed_max": 44.0,
+          "options": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            18,
+            19,
+            20,
+            22,
+            25,
+            26,
+            27,
+            29,
+            30,
+            31,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        "Mother's occupation": {
+          "kind": "category",
+          "default": 9,
+          "observed_min": 0.0,
+          "observed_max": 194.0,
+          "options": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            90,
+            99,
+            101,
+            102,
+            103,
+            112,
+            114,
+            121,
+            122,
+            123,
+            124,
+            125,
+            131,
+            132,
+            134,
+            135,
+            141,
+            143,
+            144,
+            151,
+            152,
+            153,
+            154,
+            161,
+            163,
+            171,
+            172,
+            173,
+            174,
+            175,
+            181,
+            182,
+            183,
+            191,
+            192,
+            193,
+            194,
+            195
+          ]
+        },
+        "Father's occupation": {
+          "kind": "category",
+          "default": 9,
+          "observed_min": 0.0,
+          "observed_max": 195.0,
+          "options": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            90,
+            99,
+            101,
+            102,
+            103,
+            112,
+            114,
+            121,
+            122,
+            123,
+            124,
+            125,
+            131,
+            132,
+            134,
+            135,
+            141,
+            143,
+            144,
+            151,
+            152,
+            153,
+            154,
+            161,
+            163,
+            171,
+            172,
+            173,
+            174,
+            175,
+            181,
+            182,
+            183,
+            191,
+            192,
+            193,
+            194,
+            195
+          ]
+        },
+        "Educational special needs": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Debtor": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Tuition fees up to date": {
+          "kind": "category",
+          "default": 1,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Scholarship holder": {
+          "kind": "category",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 1.0,
+          "options": [
+            0,
+            1
+          ]
+        },
+        "Unemployment rate": {
+          "kind": "number",
+          "default": 11.1,
+          "observed_min": 7.6,
+          "observed_max": 16.2,
+          "min": 0,
+          "max": 100
+        },
+        "Inflation rate": {
+          "kind": "number",
+          "default": 1.4,
+          "observed_min": -0.8,
+          "observed_max": 3.7
+        },
+        "GDP": {
+          "kind": "number",
+          "default": 0.32,
+          "observed_min": -4.06,
+          "observed_max": 3.51
+        },
+        "Curricular units 1st sem (credited)": {
+          "kind": "integer",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 20.0,
+          "min": 0
+        },
+        "Curricular units 1st sem (enrolled)": {
+          "kind": "integer",
+          "default": 6,
+          "observed_min": 0.0,
+          "observed_max": 26.0,
+          "min": 0
+        },
+        "Curricular units 1st sem (evaluations)": {
+          "kind": "integer",
+          "default": 8,
+          "observed_min": 0.0,
+          "observed_max": 45.0,
+          "min": 0
+        },
+        "Curricular units 1st sem (approved)": {
+          "kind": "integer",
+          "default": 5,
+          "observed_min": 0.0,
+          "observed_max": 26.0,
+          "min": 0
+        },
+        "Curricular units 1st sem (grade)": {
+          "kind": "number",
+          "default": 12.32,
+          "observed_min": 0.0,
+          "observed_max": 18.875,
+          "min": 0,
+          "max": 20
+        },
+        "Curricular units 1st sem (without evaluations)": {
+          "kind": "integer",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 12.0,
+          "min": 0
+        },
+        "Curricular units 2nd sem (credited)": {
+          "kind": "integer",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 19.0,
+          "min": 0
+        },
+        "Curricular units 2nd sem (enrolled)": {
+          "kind": "integer",
+          "default": 6,
+          "observed_min": 0.0,
+          "observed_max": 23.0,
+          "min": 0
+        },
+        "Curricular units 2nd sem (evaluations)": {
+          "kind": "integer",
+          "default": 8,
+          "observed_min": 0.0,
+          "observed_max": 33.0,
+          "min": 0
+        },
+        "Curricular units 2nd sem (approved)": {
+          "kind": "integer",
+          "default": 5,
+          "observed_min": 0.0,
+          "observed_max": 20.0,
+          "min": 0
+        },
+        "Curricular units 2nd sem (grade)": {
+          "kind": "number",
+          "default": 12.2,
+          "observed_min": 0.0,
+          "observed_max": 18.571428571428573,
+          "min": 0,
+          "max": 20
+        },
+        "Curricular units 2nd sem (without evaluations)": {
+          "kind": "integer",
+          "default": 0,
+          "observed_min": 0.0,
+          "observed_max": 12.0,
+          "min": 0
+        }
+      },
+      "comparison": {
+        "Logistic Regression": {
+          "cv_macro_f1": 0.7130683591404008,
+          "cv_std": 0.009949040208455301
+        },
+        "Random Forest": {
+          "cv_macro_f1": 0.7042281879721273,
+          "cv_std": 0.02051394953914174
+        },
+        "Hist Gradient Boosting": {
+          "cv_macro_f1": 0.6966967576359817,
+          "cv_std": 0.009532051670327906
+        }
+      },
+      "test_metrics": {
+        "accuracy": 0.7254237288135593,
+        "balanced_accuracy": 0.7007093024389924,
+        "macro_f1": 0.688612108850823,
+        "classification_report": {
+          "Dropout": {
+            "precision": 0.8177966101694916,
+            "recall": 0.6795774647887324,
+            "f1-score": 0.7423076923076923,
+            "support": 284.0
+          },
+          "Enrolled": {
+            "precision": 0.41735537190082644,
+            "recall": 0.6352201257861635,
+            "f1-score": 0.5037406483790524,
+            "support": 159.0
+          },
+          "Graduate": {
+            "precision": 0.855036855036855,
+            "recall": 0.7873303167420814,
+            "f1-score": 0.8197879858657244,
+            "support": 442.0
+          },
+          "accuracy": 0.7254237288135593,
+          "macro avg": {
+            "precision": 0.6967296123690577,
+            "recall": 0.7007093024389924,
+            "f1-score": 0.688612108850823,
+            "support": 885.0
+          },
+          "weighted avg": {
+            "precision": 0.7644520128210813,
+            "recall": 0.7254237288135593,
+            "f1-score": 0.7381428671867843,
+            "support": 885.0
+          }
+        },
+        "confusion_matrix": [
+          [
+            193,
+            64,
+            27
+          ],
+          [
+            26,
+            101,
+            32
+          ],
+          [
+            17,
+            77,
+            348
+          ]
+        ]
+      }
+    }
+  }
+}
