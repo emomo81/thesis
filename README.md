@@ -5,7 +5,24 @@ student or upload a CSV; receive Dropout / Enrolled / Graduate predictions and
 estimated probabilities. No training, data preparation, model selection, or
 training-data download is required to use it.
 
-## Open the dashboard
+## New: full-stack web application
+
+The repository also includes **Academa**, a Next.js/Node.js website with a landing
+page, Supabase email/password accounts, a protected prediction dashboard, CSV
+processing, and optional PostgreSQL prediction history.
+
+- Website: `web/` → **Vercel**
+- Private Python model API: `service/` → **Render** (`render.yaml`)
+- Authentication and PostgreSQL: **Supabase** (`supabase/migrations/`)
+
+Start the public site/sample workspace with `cd web && npm ci && npm run dev`.
+Real accounts and predictions require your deployment environment variables and
+the database migration. No live accounts or cloud resources are preconfigured.
+See **[DEPLOYMENT.md](DEPLOYMENT.md)** for the complete setup and acceptance checklist.
+
+---
+
+## Open the offline Streamlit dashboard
 
 Install **Python 3.11 or 3.12** first. Extract the release ZIP (do not run from
 inside the ZIP), then:
@@ -113,7 +130,7 @@ python scripts/prepare_data.py
 python scripts/package_models.py
 # Regression tests (also exercises the dashboard)
 python -m pip install pytest==8.4.2
-python -m pytest -q
+python -m pytest -q tests/test_app.py tests/test_inference.py
 # Build release/student-outcome-predictor.zip without data or training code
 python scripts/build_release.py
 # Verify installation and run all three packaged models, without a browser

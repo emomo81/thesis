@@ -11,3 +11,14 @@
 !artifacts/manifest.json
 !.streamlit/
 !.streamlit/config.toml
+!service/
+!service/Dockerfile
+!service/__init__.py
+!service/api.py
+!service/requirements.lock
+
+# Never send local credentials or caches to either image.
+**/.env
+**/.env.*
+**/__pycache__/
+**/*.pyc
