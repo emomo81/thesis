@@ -98,9 +98,15 @@ controlled execution privileges. No browser can directly edit quota rows.
 5. Copy the HTTPS service origin, e.g. `https://academa-model-api.onrender.com`,
    into Vercel's `MODEL_API_URL` (no `/v1/predict` suffix).
 
-The blueprint uses a paid **Starter** instance to avoid free-tier cold starts;
-review current pricing before creating it. If selecting a different tier, verify
-memory and request latency; free-instance sleep can exceed the website timeout.
+The blueprint uses the **free** instance type so it can be deployed without a
+paid Render plan. Free instances sleep after roughly 15 minutes of inactivity,
+and the cold start that follows can exceed the website's 45-second model-call
+timeout. The first prediction after an idle period therefore fails with the
+retryable "The model service did not respond. It may be starting up" notice;
+retrying once the service is awake succeeds. For uninterrupted use, change
+`plan:` in `render.yaml` to `starter` (paid) and review current pricing. If
+selecting any other tier, verify memory and request latency.
+
 A single Uvicorn worker loads all models at startup, verifies hashes and versions,
 and limits concurrent model work. No training occurs. A missing/short secret or
 invalid model bundle stops startup.
