@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     manifest = json.loads((ROOT / "artifacts/manifest.json").read_text())
     files = ["app.py", "launch.py", "Start Dashboard.bat", "Start Dashboard.command",
-             "requirements.txt", "requirements.lock", "README.md", "MODEL_CARD.md",
+             "requirements.txt", "requirements.lock", "README.md", "MODEL_CARD.md", "DEPLOYMENT.md",
              "Dockerfile", ".dockerignore", ".streamlit/config.toml",
              "dashboard/__init__.py", "dashboard/schema.py", "dashboard/inference.py",
              "artifacts/manifest.json"]

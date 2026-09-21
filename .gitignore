@@ -19,3 +19,13 @@ models/
 .pytest_cache/
 release/
 .cache/
+
+# Next.js and local deployment secrets
+node_modules/
+.next/
+*.tsbuildinfo
+.env.*
+!.env.example
+.vercel/
+test-results/
+playwright-report/

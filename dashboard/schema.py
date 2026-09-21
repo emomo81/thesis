@@ -368,4 +368,3 @@ VARIABLE_DESCRIPTIONS = {
     "Inflation rate": "Cohort-year %, PORDATA",
     "GDP": "Cohort-year % change, PORDATA",
 }
-

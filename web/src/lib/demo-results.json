@@ -1,0 +1,35 @@
+[
+  {
+    "label": "Steady progress",
+    "grade": 14.5,
+    "approved": 6,
+    "outcome": "Graduate",
+    "probabilities": {
+      "Dropout": 0.02275251147793014,
+      "Enrolled": 0.24012048891366386,
+      "Graduate": 0.737126999608406
+    }
+  },
+  {
+    "label": "Mixed progress",
+    "grade": 11.0,
+    "approved": 3,
+    "outcome": "Enrolled",
+    "probabilities": {
+      "Dropout": 0.35019750764982,
+      "Enrolled": 0.6252986537804248,
+      "Graduate": 0.024503838569755167
+    }
+  },
+  {
+    "label": "Limited progress",
+    "grade": 0.0,
+    "approved": 0,
+    "outcome": "Dropout",
+    "probabilities": {
+      "Dropout": 0.802707704935376,
+      "Enrolled": 0.19723717749039468,
+      "Graduate": 5.511757422924939e-05
+    }
+  }
+]
